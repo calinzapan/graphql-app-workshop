@@ -4,7 +4,7 @@ const { Prisma } = require('prisma-binding')
 
 const server = new GraphQLServer({
     typeDefs: './src/schema.graphql',
-    resolvers,
+    // resolvers,
     context: req => ({
       ...req,
       db: new Prisma({
