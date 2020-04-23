@@ -9,11 +9,18 @@ import {
   Subtitle,
   Anchor
 } from './styles';
+import { withApollo, graphql } from 'react-apollo';
+import { LOGIN_MUTATION } from '../../graphql/mutations';
+import { compose } from 'redux';
 
-const Login = () => {
+const Login = (props) => {
   const doLogin = (inputData) => {
-    // implement login
-    console.log(inputData);
+    props.client.mutate({
+      mutation: LOGIN_MUTATION,
+      variables: {
+        ...inputData
+      }
+    })
   }
   const { inputs, handleInputChange, handleSubmit } = useForm({
     email: '',
@@ -30,7 +37,7 @@ const Login = () => {
           label="Email Address"
           placeholder="jane@doe.com"
           name="email"
-          values={inputs.email}
+          value={inputs.email}
           onChange={handleInputChange}
           required={true}
         />
@@ -38,7 +45,7 @@ const Login = () => {
           type="password"
           label="Password"
           name="password"
-          values={inputs.password}
+          value={inputs.password}
           onChange={handleInputChange}
           required={true}
         />
@@ -50,4 +57,7 @@ const Login = () => {
     </Container>
   );
 }
-export default Login;
+export default compose(
+  withApollo,
+  graphql(LOGIN_MUTATION)
+)(Login);
