@@ -20,7 +20,7 @@ FormGroup.propTypes = {
   placeholder: PropTypes.string,
   required: PropTypes.bool,
   name: PropTypes.string.isRequired,
-  value: PropTypes.string.isRequired,
+  value: PropTypes.string,
   onChange: PropTypes.func
 }
 export default FormGroup;

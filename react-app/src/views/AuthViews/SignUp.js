@@ -9,18 +9,27 @@ import {
   Subtitle,
   Anchor
 } from './styles';
+import { compose } from 'redux';
+import { withApollo, graphql } from 'react-apollo';
+import { SIGN_IN_MUTATION } from '../../graphql/mutations'
+import { navigate } from '@reach/router/lib/history';
 
-const SignUp = () => {
-  const doLogin = (inputData) => {
-    // implement login
-    console.log(inputData);
+const SignUp = (props) => {
+  const doSignUp = (inputData) => {
+    props.client.mutate({
+      mutation: SIGN_IN_MUTATION,
+      variables: {
+        ...inputData
+      }
+    })
+    navigate('/dashboard');
   }
   const { inputs, handleInputChange, handleSubmit } = useForm({
     firstName: '',
     name: '',
     email: '',
     password: ''
-  }, doLogin);
+  }, doSignUp);
   return (
     <Container>
       <FormContainer onSubmit={handleSubmit}>
@@ -32,7 +41,7 @@ const SignUp = () => {
             label="First Name"
             placeholder="Jane"
             name="firstName"
-            values={inputs.firstName}
+            value={inputs.firstName}
             onChange={handleInputChange}
             required={true}
           />
@@ -41,7 +50,7 @@ const SignUp = () => {
             label="Last Name"
             placeholder="Doe"
             name="name"
-            values={inputs.name}
+            value={inputs.name}
             onChange={handleInputChange}
             required={true}
           />
@@ -52,7 +61,7 @@ const SignUp = () => {
           label="Email Address"
           placeholder="jane@doe.com"
           name="email"
-          values={inputs.email}
+          value={inputs.email}
           onChange={handleInputChange}
           required={true}
         />
@@ -60,7 +69,7 @@ const SignUp = () => {
           type="password"
           label="Password"
           name="password"
-          values={inputs.password}
+          value={inputs.password}
           onChange={handleInputChange}
           required={true}
         />
@@ -73,4 +82,7 @@ const SignUp = () => {
     </Container>
   );
 }
-export default SignUp;
+export default compose(
+  withApollo,
+  graphql(SIGN_IN_MUTATION)
+)(SignUp);
